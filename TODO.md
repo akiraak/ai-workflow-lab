@@ -5,5 +5,4 @@
 <!-- 形式: - [ ] タスク内容 -->
 
 ## Claude Code
-- [ ] Claude Code に指示をするときの最適解の調査
-- [ ] プロジェクト内のファイルを把握しやすくするための仕組みの調査
+- [ ] Claude Code に指示をするときの最適解の調査 (claude-code-prompting-research.md)
