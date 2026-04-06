@@ -39,6 +39,15 @@ export default defineConfig({
             { text: '1-8. コンテキスト制御', link: '/experiments/claude-code-prompting/08-context-control' },
           ],
         },
+        {
+          text: 'Phase 2: タスク別指示パターン',
+          items: [
+            { text: '2-1. バグ修正', link: '/experiments/claude-code-prompting/09-task-bug-fix' },
+            { text: '2-2. 新機能実装', link: '/experiments/claude-code-prompting/10-task-new-feature' },
+            { text: '2-3. リファクタリング', link: '/experiments/claude-code-prompting/11-task-refactoring' },
+            { text: '2-4. コードレビュー・説明', link: '/experiments/claude-code-prompting/12-task-code-review' },
+          ],
+        },
       ],
       '/research/': [
         {
@@ -46,6 +55,7 @@ export default defineConfig({
           items: [
             { text: '2026-04-05', link: '/research/cache/2026-04-05T000000/' },
             { text: '2026-04-06', link: '/research/cache/2026-04-06T000000/' },
+            { text: '2026-04-06 (Phase 2)', link: '/research/cache/2026-04-06T060000/' },
           ],
         },
       ],
