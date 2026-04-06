@@ -2,6 +2,8 @@
 
 AIを普段の開発・作業ワークフローに組み込む手法を調査・検証するためのリポジトリです。
 
+https://akiraak.github.io/ai-workflow-lab/
+
 ## 目的
 
 - AIツール（Claude Code、GitHub Copilot など）を活用した開発ワークフローの実験
