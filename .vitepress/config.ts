@@ -31,6 +31,12 @@ export default defineConfig({
           items: [
             { text: '1-1. 対話プロンプトの特性', link: '/experiments/claude-code-prompting/01-prompt-characteristics' },
             { text: '1-2. CLAUDE.md の活用法', link: '/experiments/claude-code-prompting/02-claude-md' },
+            { text: '1-3. Plan mode の活用法', link: '/experiments/claude-code-prompting/03-plan-mode' },
+            { text: '1-4. slash commands・ツール連携', link: '/experiments/claude-code-prompting/04-slash-commands' },
+            { text: '1-5. 最適なディレクトリ構成', link: '/experiments/claude-code-prompting/05-directory-structure' },
+            { text: '1-6. .claude ディレクトリ', link: '/experiments/claude-code-prompting/06-dot-claude' },
+            { text: '1-7. ファイル把握の仕組み', link: '/experiments/claude-code-prompting/07-file-discovery' },
+            { text: '1-8. コンテキスト制御', link: '/experiments/claude-code-prompting/08-context-control' },
           ],
         },
       ],
