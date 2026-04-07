@@ -1,0 +1,15 @@
+--- a/src/discount.ts
++++ b/src/discount.ts
+@@ -9,11 +9,8 @@
+  * Returns the discounted price.
+  */
+ export function applyDiscount(price: number, percentage: number): number {
+-  if (percentage < 0 || percentage > 100) {
+-    return price;
+-  }
+   const factor = 1 - percentage / 100;
+-  return Math.max(0, price * factor);
++  return price * factor;
+ }
+
+ /** Validate that a coupon is well-formed */

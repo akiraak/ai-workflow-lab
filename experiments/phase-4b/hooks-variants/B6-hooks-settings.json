@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(echo $CLAUDE_TOOL_INPUT | jq -r '.file_path // .filePath // empty') && if [ -n \"$file\" ] && [[ \"$file\" == *.ts ]]; then npx eslint --fix \"$file\" 2>/dev/null; npx prettier --write \"$file\" 2>/dev/null; fi; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
