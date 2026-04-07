@@ -51,11 +51,12 @@ run_claude() {
   local model="${2:-$MODEL}"
   local prompt
   prompt=$(cat "$prompt_file")
-  echo "  Running claude -p with model=$model ..."
+  echo "  Running claude -p with model=$model ..." >&2
   claude -p "$prompt" \
     --model "$model" \
     --output-format json \
     --max-turns 30 \
+    --allowedTools "Edit Write Read Bash Glob Grep" \
     2>/dev/null
 }
 
@@ -68,6 +69,7 @@ run_claude_text() {
     --model "$model" \
     --output-format text \
     --max-turns 10 \
+    --allowedTools "Edit Write Read Bash Glob Grep" \
     2>/dev/null
 }
 

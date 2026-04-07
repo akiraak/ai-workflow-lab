@@ -45,3 +45,6 @@
   - バグパッチ 2 本 (`experiments/phase-4b/scripts/bug{1,2}-*.patch`)
   - 判定スクリプト 4 本 (`experiments/phase-4b/scripts/judge-*.sh`)
   - 実験ランナースクリプト (`experiments/phase-4b/scripts/run-experiment.sh`)
+- [x] Phase 4B-B1: 事実形式 vs 命令形式の遵守率比較 (完了日: 2026-04-07)
+  - Factual 平均 9.4/10, Imperative 平均 9.0/10 (各 10 試行)
+  - 結果: `experiments/phase-4b/results/B1/results.csv`
