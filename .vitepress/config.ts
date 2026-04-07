@@ -19,13 +19,11 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      { text: 'ホーム', link: '/' },
-      { text: '調査結果', link: '/experiments/claude-code-prompting/' },
       { text: 'Web調査キャッシュ', link: '/research/' },
     ],
 
     sidebar: {
-      '/experiments/': [
+      '/': [
         {
           text: 'Claude Code プロンプティング',
           items: [
