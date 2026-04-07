@@ -48,6 +48,14 @@ export default defineConfig({
             { text: '2-4. コードレビュー・説明', link: '/experiments/claude-code-prompting/12-task-code-review' },
           ],
         },
+        {
+          text: 'Phase 3: ベストプラクティス・アンチパターン',
+          items: [
+            { text: '3-1. 推奨パターン', link: '/experiments/claude-code-prompting/13-best-practices' },
+            { text: '3-2. アンチパターン', link: '/experiments/claude-code-prompting/14-anti-patterns' },
+            { text: '3-3. CLAUDE.md の実例', link: '/experiments/claude-code-prompting/15-claude-md-examples' },
+          ],
+        },
       ],
       '/research/': [
         {
@@ -56,6 +64,7 @@ export default defineConfig({
             { text: '2026-04-05', link: '/research/cache/2026-04-05T000000/' },
             { text: '2026-04-06', link: '/research/cache/2026-04-06T000000/' },
             { text: '2026-04-06 (Phase 2)', link: '/research/cache/2026-04-06T060000/' },
+            { text: '2026-04-06 (Phase 3)', link: '/research/cache/2026-04-06T120000/' },
           ],
         },
       ],
