@@ -48,3 +48,7 @@
 - [x] Phase 4B-B1: 事実形式 vs 命令形式の遵守率比較 (完了日: 2026-04-07)
   - Factual 平均 9.4/10, Imperative 平均 9.0/10 (各 10 試行)
   - 結果: `experiments/phase-4b/results/B1/results.csv`
+- [x] Phase 4B-B2: 否定形 vs 肯定形の違反率比較 (完了日: 2026-04-08)
+  - Positive（肯定形）平均 8.9/10, Negative（否定形）平均 9.1/10 (各 10 試行)
+  - 差はわずか 0.2 で、フレーミングの影響は限定的
+  - 結果: `experiments/phase-4b/results/B2/results.csv`
