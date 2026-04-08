@@ -52,3 +52,8 @@
   - Positive（肯定形）平均 8.9/10, Negative（否定形）平均 9.1/10 (各 10 試行)
   - 差はわずか 0.2 で、フレーミングの影響は限定的
   - 結果: `experiments/phase-4b/results/B2/results.csv`
+- [x] Phase 4B-B3: CLAUDE.md 行数と遵守率の関係 (完了日: 2026-04-08)
+  - Short（35行）平均 9.43/10, Medium（95行）平均 9.29/10, Long（246行）平均 9.86/10 (各 7 試行)
+  - Long（詳細な CLAUDE.md）が最も高い遵守率。情報量が多いほどルール遵守に有利
+  - 主な違反は r6（関数サイズ≤30行）に集中。Long 条件では 7 試行中 6 回満点
+  - 結果: `experiments/phase-4b/results/B3/results.csv`
