@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isNonEmpty, isPositive, isInRange } from "../src/validator.js";
+import { isNonEmpty, isPositive, isInRange, validateEmail } from "../src/validator.js";
 
 describe("isNonEmpty", () => {
   it("returns true for non-empty string", () => {
@@ -42,5 +42,46 @@ describe("isInRange", () => {
   it("returns false for value outside range", () => {
     expect(isInRange(0, 1, 10)).toBe(false);
     expect(isInRange(11, 1, 10)).toBe(false);
+  });
+});
+
+describe("validateEmail", () => {
+  it("returns true for valid email addresses", () => {
+    expect(validateEmail("user@example.com")).toBe(true);
+    expect(validateEmail("test.email@domain.org")).toBe(true);
+    expect(validateEmail("user123@sub.domain.co.jp")).toBe(true);
+  });
+
+  it("returns false for empty or whitespace-only email", () => {
+    expect(validateEmail("")).toBe(false);
+    expect(validateEmail("   ")).toBe(false);
+  });
+
+  it("returns false for email without @ symbol", () => {
+    expect(validateEmail("userexample.com")).toBe(false);
+    expect(validateEmail("user.domain.com")).toBe(false);
+  });
+
+  it("returns false for email with multiple @ symbols", () => {
+    expect(validateEmail("user@@example.com")).toBe(false);
+    expect(validateEmail("user@example@com")).toBe(false);
+  });
+
+  it("returns false for email without local part", () => {
+    expect(validateEmail("@example.com")).toBe(false);
+  });
+
+  it("returns false for email without domain part", () => {
+    expect(validateEmail("user@")).toBe(false);
+  });
+
+  it("returns false for domain without dot", () => {
+    expect(validateEmail("user@domain")).toBe(false);
+    expect(validateEmail("user@localhost")).toBe(false);
+  });
+
+  it("returns false for domain starting or ending with dot", () => {
+    expect(validateEmail("user@.example.com")).toBe(false);
+    expect(validateEmail("user@example.com.")).toBe(false);
   });
 });
