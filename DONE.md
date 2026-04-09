@@ -78,3 +78,6 @@
   - 6 実験（115 試行）の横断分析。6 仮説中 1 仮説（B6: Hooks）のみ支持
   - 主要知見: Hooks（決定論的）> CLAUDE.md（助言的）、長い CLAUDE.md は有効、記述スタイルの差は実用上無視可能
   - レポート: `experiments/claude-code-prompting/18-phase4b-integrated-report.md`
+- [x] Web サイト: Phase 4B 各実験結果ページの作成 (B1〜B6) (完了日: 2026-04-09)
+  - B1: 事実形式 vs 命令形式、B2: 肯定形 vs 否定形、B3: CLAUDE.md 行数、B4: Plan mode、B5: TDD Bug Fix、B6: Hooks
+  - 各ページに仮説・実験条件・全試行データ・条件別サマリ・考察を記載
