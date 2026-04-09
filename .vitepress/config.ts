@@ -54,6 +54,25 @@ export default defineConfig({
             { text: '3-3. CLAUDE.md の実例', link: '/experiments/claude-code-prompting/15-claude-md-examples' },
           ],
         },
+        {
+          text: '横断分析',
+          items: [
+            { text: 'Phase 1〜3 横断分析レポート', link: '/experiments/claude-code-prompting/16-cross-analysis' },
+          ],
+        },
+        {
+          text: 'Phase 4B: 実証実験',
+          items: [
+            { text: '概要', link: '/experiments/phase-4b/' },
+            { text: 'B1: 事実形式 vs 命令形式', link: '/experiments/phase-4b/B1' },
+            { text: 'B2: 否定形 vs 肯定形', link: '/experiments/phase-4b/B2' },
+            { text: 'B3: CLAUDE.md 行数と遵守率', link: '/experiments/phase-4b/B3' },
+            { text: 'B4: Plan mode 初回成功率', link: '/experiments/phase-4b/B4' },
+            { text: 'B5: TDD Bug Fix 効果', link: '/experiments/phase-4b/B5' },
+            { text: 'B6: Hooks 品質影響', link: '/experiments/phase-4b/B6' },
+            { text: '統合レポート', link: '/experiments/claude-code-prompting/18-phase4b-integrated-report' },
+          ],
+        },
       ],
       '/research/': [
         {
