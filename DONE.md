@@ -57,3 +57,9 @@
   - Long（詳細な CLAUDE.md）が最も高い遵守率。情報量が多いほどルール遵守に有利
   - 主な違反は r6（関数サイズ≤30行）に集中。Long 条件では 7 試行中 6 回満点
   - 結果: `experiments/phase-4b/results/B3/results.csv`
+- [x] Phase 4B-B5: TDD Bug Fix パターンの効果測定 (完了日: 2026-04-08)
+  - TDD 条件: tests_pass 100%, bug_fixed 100%, new_tests 平均 1.6 (各 5 試行 × 2 バグ)
+  - Direct 条件: tests_pass 100%, bug_fixed 100%, new_tests 平均 0.8 (各 5 試行 × 2 バグ)
+  - バグ修正成功率は両条件とも 100% で差なし。TDD の主効果はテスト追加の確実性（100% vs 50%）
+  - TDD はやや多くのターン数を使用（平均 9.1 vs 7.9）
+  - 結果: `experiments/phase-4b/results/B5/results.csv`
