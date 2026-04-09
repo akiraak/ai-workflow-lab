@@ -48,3 +48,12 @@ Claude Code に指示をするときの最適解を調査するシリーズ。
 | B4 | [Plan mode の初回成功率測定](./17-B4-plan-mode-success-rate.md) | 設計完了 |
 | B5 | [TDD Bug Fix パターンの効果測定](./17-B5-tdd-bug-fix.md) | 設計完了 |
 | B6 | [Hooks（lint 自動実行）の品質影響測定](./17-B6-hooks-lint-quality.md) | 設計完了 |
+| - | [Phase 4B 統合レポート](./18-phase4b-integrated-report.md) | 完了 |
+
+## Phase 4C: 追加 Web 調査（ギャップ埋め）
+
+| # | テーマ | 状態 |
+|---|--------|------|
+| C1 | [CI/CD 統合パターン](./19-C1-cicd-integration.md) | 完了 |
+| C2 | [チームワークフロー](./19-C2-team-workflow.md) | 完了 |
+| C3 | [コスト最適化](./19-C3-cost-optimization.md) | 完了 |

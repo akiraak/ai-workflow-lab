@@ -85,3 +85,8 @@
   - 横断分析レポートをサイドバーに追加
   - Phase 4B 概要ページ・各実験結果ページ作成
   - サイドバー・トップページの更新
+- [x] Phase 4C: 追加 Web 調査（ギャップ埋め）— 3テーマ36ページ調査 (完了日: 2026-04-09)
+  - C1: CI/CD 統合パターン（`19-C1-cicd-integration.md`）— claude-code-action, GitHub Actions 8パターン, ヘッドレスモード, GitLab CI/CD, セキュリティ
+  - C2: チームワークフロー（`19-C2-team-workflow.md`）— CLAUDE.md 3層管理, Git Worktrees, Code Review, 導入事例, ガバナンス
+  - C3: コスト最適化（`19-C3-cost-optimization.md`）— モデル使い分け, Fast mode, トークン最適化, 料金体系, モニタリング
+  - キャッシュ: `research/cache/2026-04-09T100000/`（36ページ）
