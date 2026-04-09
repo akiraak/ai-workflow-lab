@@ -63,3 +63,8 @@
   - バグ修正成功率は両条件とも 100% で差なし。TDD の主効果はテスト追加の確実性（100% vs 50%）
   - TDD はやや多くのターン数を使用（平均 9.1 vs 7.9）
   - 結果: `experiments/phase-4b/results/B5/results.csv`
+- [x] Phase 4B-B6: Hooks（lint 自動実行）の品質影響測定 (完了日: 2026-04-08)
+  - no-hooks 条件: eslint_errors 平均 1.0（3/7 試行でエラーあり）、テスト全通過
+  - hooks 条件: eslint_errors 0（全7試行でエラーゼロ）、テスト全通過
+  - Hooks の主効果は ESLint エラーの完全除去。prettier/type_errors は両条件ともゼロ
+  - 結果: `experiments/phase-4b/results/B6/results.csv`
