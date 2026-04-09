@@ -68,3 +68,9 @@
   - hooks 条件: eslint_errors 0（全7試行でエラーゼロ）、テスト全通過
   - Hooks の主効果は ESLint エラーの完全除去。prettier/type_errors は両条件ともゼロ
   - 結果: `experiments/phase-4b/results/B6/results.csv`
+- [x] Phase 4B-B4: Plan mode の初回成功率測定 (完了日: 2026-04-09)
+  - 4 条件（no-plan/plan × sonnet/opus）各 5 試行 = 20 試行
+  - tests_pass が全条件で 0%。タスクの複雑さに対してテスト通過困難
+  - Plan mode は改善を示さず（plan+sonnet では subject_id が 40% に低下）
+  - Opus は Sonnet より効率的（平均 14.4 turns vs 19.6 turns）だが結果は同等
+  - 結果: `experiments/phase-4b/results/B4/results.csv`

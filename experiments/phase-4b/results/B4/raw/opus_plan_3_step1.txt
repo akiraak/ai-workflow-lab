@@ -1,0 +1,56 @@
+コードベースを把握しました。以下が実装計画です。
+
+---
+
+## 実装計画: 注文完了時のメール通知機能
+
+### 変更するファイル一覧
+
+| ファイル | 変更内容 |
+|---|---|
+| `src/order.ts` | `createOrder` に通知送信ロジックを追加 |
+| `src/index.ts` | 新しくエクスポートする関数があれば追加 |
+| `tests/order.test.ts` | **新規作成** — 注文作成+通知送信のテスト |
+
+### 各ファイルの変更内容
+
+#### 1. `src/order.ts`
+
+- `getUserById` を `@/user` から import
+- `sendNotification` を `@/notification` から import
+- `createOrder` 関数の末尾に以下のロジックを追加:
+  1. `getUserById(userId)` でユーザーを取得
+  2. ユーザーが見つかった場合、通知を送信:
+     - **件名**: `` `注文確認: #${id}` ``
+     - **本文**: アイテム名と数量を列挙し、合計金額を末尾に記載（例: `Apple x2, Banana x3\n合計: ¥385`）
+     - **宛先**: `user.email`
+  3. ユーザーが見つからない場合 → 通知はスキップ（注文自体は正常に返す）
+
+**注意**: `createOrder` の戻り値の型 `Order` は変更しない。通知送信は副作用として実行する。
+
+#### 2. `tests/order.test.ts`（新規作成）
+
+- `createUser`, `clearUsers` を `@/user` から import
+- `createOrder`, `clearOrders` を `@/order` から import
+- `getSentNotifications`, `clearNotifications` を `@/notification` から import
+- テストケース:
+  - **正常系**: ユーザー作成 → 注文作成 → `getSentNotifications()` で通知が1件送信されていることを検証。件名・本文・宛先が正しいことを確認
+  - **ユーザー未存在時**: 存在しない userId で注文作成 → 通知が送信されないことを検証。注文自体は正常に返ることも確認
+  - **複数アイテム**: 複数アイテムの注文で、本文にすべてのアイテム名と合計金額が含まれることを検証
+- 各テストの `beforeEach` で `clearUsers()`, `clearOrders()`, `clearNotifications()` を呼んでストアをリセット
+
+### 実装の順序
+
+1. **テストを先に書く** (`tests/order.test.ts`) — 期待する動作を定義
+2. **`src/order.ts` を修正** — `createOrder` に通知ロジックを追加
+3. **`src/index.ts` を確認** — `createOrder` は既にエクスポート済みなので変更不要の可能性が高い
+4. **`npx vitest run` でテスト実行** — 全テストが通ることを確認
+5. **`npx tsc --noEmit` で型チェック** — 型エラーがないことを確認
+
+### リスクや注意点
+
+1. **import パス**: CLAUDE.md では `@/` エイリアスを使う規約だが、既存の `order.ts` は `"./cart.js"` という相対パスを使っている。既存コードとの一貫性を優先して相対パスで追加するか、規約に合わせて `@/` にするか判断が必要。既存の import を変えるのは今回のスコープ外なので、**新規 import は `@/` を使い、既存の import はそのまま残す**のが妥当
+2. **logger の不在**: CLAUDE.md では `console.log` ではなく `logger` を使う規約があるが、`src/logger.ts` がまだ存在しない。通知送信のログが必要な場合は logger を先に作るか、今回はログ出力なしで実装する
+3. **関数の行数制限**: CLAUDE.md の「1関数30行以下」の規約がある。通知本文の組み立てロジックが大きくなる場合は、本文生成を別のヘルパー関数（例: `formatOrderSummary`）に切り出す必要がある。現在の `createOrder` は約10行なので、通知ロジック追加後も30行に収まるか確認すること
+4. **副作用の結合**: `createOrder` に通知送信という副作用を直接追加するため、将来的に「通知なしで注文を作りたい」ケースが出ると対応しにくい。ただし現要件ではこの設計で十分
+5. **既存テストへの影響**: order 関連の既存テストはないため、既存テストが壊れるリスクはない。念のため全テストスイートを実行して確認する

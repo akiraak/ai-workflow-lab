@@ -1,0 +1,50 @@
+コードの全体像を把握しました。以下が実装計画です。
+
+---
+
+## 実装計画: 注文完了時のメール通知機能
+
+### 変更するファイル一覧
+
+| # | ファイル | 変更種別 |
+|---|---------|---------|
+| 1 | `src/order.ts` | 修正 |
+| 2 | `tests/order.test.ts` | 新規作成 |
+
+### 各ファイルの変更内容
+
+#### 1. `src/order.ts` — `createOrder` に通知送信ロジックを追加
+
+- `getUserById` (`src/user.ts`) と `sendNotification` (`src/notification.ts`) を import する
+- `createOrder` 関数の末尾（`orders.set` の後、`return` の前）に以下の処理を追加:
+  1. `getUserById(userId)` でユーザーを取得
+  2. ユーザーが見つかり、email が存在する場合のみ通知を送信
+  3. 件名: `` `注文確認: #${id}` ``
+  4. 本文: アイテム名と数量の一覧 + 合計金額のサマリー（例: `"Apple x2, Banana x3\n合計: ¥385"`）
+  5. `sendNotification(user.email, subject, body)` を呼び出す
+
+**注意**: ユーザーが見つからない場合は通知をスキップするだけで、注文作成自体は失敗させない。現行の関数シグネチャ（引数・戻り値）は変更不要。
+
+#### 2. `tests/order.test.ts` — 新規テストファイル
+
+- `createUser`, `clearUsers` / `createOrder`, `clearOrders` / `getSentNotifications`, `clearNotifications` を import
+- `beforeEach` で各ストアを `clear*` でリセット
+- テストケース:
+  1. **注文作成時に通知が送信される** — ユーザー作成 → `createOrder` → `getSentNotifications()` で通知が1件、宛先・件名・本文を検証
+  2. **件名が正しい形式である** — `"注文確認: #${orderId}"` と一致するか
+  3. **本文にアイテム名と合計金額が含まれる** — 複数アイテムの場合も確認
+  4. **ユーザーが存在しない場合は通知が送信されない** — 存在しない userId で `createOrder` → 通知0件、かつ注文自体は正常に作成される
+
+### 実装の順序
+
+1. **`src/order.ts` の修正** — import 追加 → 通知ロジックの実装
+2. **`tests/order.test.ts` の作成** — テスト作成 → `npx vitest run` で全テスト通過を確認
+3. **`npx tsc --noEmit`** で型チェック通過を確認
+
+### リスクや注意点
+
+1. **循環依存**: `order.ts` → `user.ts` / `notification.ts` の一方向依存のみなので問題なし
+2. **通知失敗時の注文への影響**: `sendNotification` は現在インメモリのスタブで例外を投げないが、将来的に外部サービス連携する場合は try-catch で囲んで注文作成を保護する必要がある。今回のスタブ実装では不要
+3. **import パス**: CLAUDE.md では `@/` エイリアスの使用が規約だが、既存の `order.ts` は `"./cart.js"` の相対パスを使っている。既存コードとの一貫性を考えると、`order.ts` 内は相対パスに合わせるか `@/` に統一するかの判断が必要。既存の相対パスに合わせるのが無難
+4. **本文フォーマット**: `items.map(i => `${i.name} x${i.quantity}`).join(", ")` + `\n合計: ¥${total}` のようなシンプルな形式で十分。通貨記号や桁区切りは要件に明示がないため最小限にする
+5. **既存テストへの影響**: `createOrder` の振る舞いが変わる（副作用として通知が送られる）ため、既存テストがある場合は `clearNotifications` / `clearUsers` のセットアップが必要。現時点では `order.test.ts` は存在しないので影響なし

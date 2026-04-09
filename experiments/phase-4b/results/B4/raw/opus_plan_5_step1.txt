@@ -1,0 +1,58 @@
+コードベースの全容を把握しました。以下が実装計画です。
+
+---
+
+## 実装計画: 注文完了時のメール通知機能
+
+### 変更するファイル一覧
+
+| # | ファイル | 変更種別 |
+|---|---------|---------|
+| 1 | `src/order.ts` | 修正 — `createOrder` に通知送信ロジックを追加 |
+| 2 | `tests/order.test.ts` | 新規 — 注文作成と通知送信のテスト |
+
+### 各ファイルの変更内容
+
+#### 1. `src/order.ts`
+
+- `getUserById` を `@/user` から import
+- `sendNotification` を `@/notification` から import
+- `createOrder` 関数の末尾（`orders.set()` の後）に以下のロジックを追加:
+  1. `getUserById(userId)` でユーザー情報を取得
+  2. ユーザーが見つかった場合、通知を送信:
+     - **宛先**: `user.email`
+     - **件名**: `注文確認: #${id}`
+     - **本文**: items の各アイテム名と合計金額のサマリー（例: `ご注文ありがとうございます。\n\n商品: ItemA, ItemB\n合計金額: ¥1,100\n`）
+  3. ユーザーが見つからない場合は通知をスキップ（注文自体は正常に返す）
+
+**注意**: 現在の `createOrder` は `items: CartItem[]` ではなく `items: string[]`（アイテム名の配列）を受け取っている。本文にアイテム名は含められるが、個別価格は含められない。合計金額は `total` 引数から取得する。
+
+#### 2. `tests/order.test.ts`（新規作成）
+
+- `beforeEach` で `clearOrders()`, `clearUsers()`, `clearNotifications()` を呼びデータをリセット
+- テストケース:
+  - **注文が正しく作成されること** — 基本的な `createOrder` の動作確認
+  - **注文作成時に通知が送信されること** — `createUser` でユーザーを作成 → `createOrder` を呼ぶ → `getSentNotifications()` で通知が1件送信されたことを確認、件名・本文・宛先を検証
+  - **存在しないユーザーの場合、通知は送信されないが注文は成功すること** — ユーザー未作成で `createOrder` → 注文は返される、通知は0件
+  - **通知の件名が「注文確認: #{orderId}」形式であること**
+  - **通知の本文にアイテム名と合計金額が含まれること**
+
+### 実装の順序
+
+1. **`tests/order.test.ts` を作成**（テストファースト — 既存の注文機能の基本テスト＋通知のテスト）
+2. **`src/order.ts` を修正**（import 追加 → `createOrder` にロジック追加）
+3. **`npx vitest run` でテスト実行** — 全テスト通過を確認
+4. **`npx tsc --noEmit` で型チェック**
+5. **`npx eslint src/ tests/` で lint チェック**
+
+### リスクや注意点
+
+1. **モジュール間の結合度の増加**: `order.ts` が `user.ts` と `notification.ts` に依存するようになる。現状はすべてインメモリなので問題ないが、将来的に外部サービス（メール送信API等）に置き換える場合、`sendNotification` の内部実装を変えるだけで済む設計にはなっている。
+
+2. **通知失敗時の挙動**: `sendNotification` は現在エラーを投げない実装だが、将来的に外部API呼び出しが入ると失敗しうる。注文作成自体は通知失敗に影響されるべきでないため、通知部分を try-catch で囲むことを検討すべき。
+
+3. **`items` が `string[]` 型**: `createOrder` の `items` パラメータはアイテム名の文字列配列であり、`CartItem` 型ではない。そのため本文に個別の価格を含めることはできず、アイテム名一覧 + 合計金額のみのサマリーになる。
+
+4. **`index.ts` の更新は不要**: `createOrder` のシグネチャ（引数・戻り値）は変わらないため、re-export の変更は不要。
+
+5. **既存テストへの影響なし**: 既存の `cart.test.ts`, `discount.test.ts`, `validator.test.ts` は `order.ts` に依存していないため影響を受けない。

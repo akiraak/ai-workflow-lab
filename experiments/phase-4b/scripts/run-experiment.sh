@@ -206,10 +206,11 @@ run_b4() {
           echo "  Step 1: Getting plan..."
           PLAN_TEXT=$(run_claude_text "$PROMPTS_DIR/B4-plan-step1.txt" "$model_id")
 
-          # Step 2: Execute plan
-          STEP2_PROMPT=$(cat "$PROMPTS_DIR/B4-plan-step2-template.txt")
-          STEP2_PROMPT="${STEP2_PROMPT/\{PLAN\}/$PLAN_TEXT}"
-          echo "$STEP2_PROMPT" > /tmp/b4-step2-prompt.txt
+          # Step 2: Execute plan (use awk to avoid bash substitution issues with special chars)
+          awk -v plan="$(echo "$PLAN_TEXT" | sed 's/[&/\\]/\\&/g')" '{gsub(/\{PLAN\}/, plan); print}' "$PROMPTS_DIR/B4-plan-step2-template.txt" > /tmp/b4-step2-prompt.txt 2>/dev/null || {
+            # Fallback: just concatenate intro + plan
+            printf "以下の計画に沿って実装してください。\n\n%s\n\n実装後、テスト・型チェック・lint を実行して確認してください。\n" "$PLAN_TEXT" > /tmp/b4-step2-prompt.txt
+          }
           JSON_OUT=$(run_claude "/tmp/b4-step2-prompt.txt" "$model_id")
 
           mkdir -p "$RESULTS_DIR/B4/raw"

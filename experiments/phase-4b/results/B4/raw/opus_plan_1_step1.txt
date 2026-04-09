@@ -1,0 +1,59 @@
+コードベースを把握しました。以下が実装計画です。
+
+---
+
+## 実装計画: 注文完了時のメール通知機能
+
+### 変更するファイル一覧
+
+| # | ファイル | 変更種別 |
+|---|---------|---------|
+| 1 | `src/order.ts` | 修正 |
+| 2 | `tests/order.test.ts` | 新規作成 |
+
+### 各ファイルの変更内容
+
+#### 1. `src/order.ts` — 修正
+
+- `getUserById` を `user.ts` から、`sendNotification` を `notification.ts` から import する
+- `createOrder` 関数の末尾（`orders.set(id, order)` の後、`return order` の前）に通知送信ロジックを追加:
+  1. `getUserById(userId)` でユーザーを取得
+  2. ユーザーが見つかった場合のみ、通知を送信する
+  3. 件名: `` `注文確認: #${id}` ``
+  4. 本文: items を整形してアイテム名・数量を列挙し、末尾に合計金額（`total`）を記載
+  5. `sendNotification(user.email, subject, body)` を呼び出す
+
+**注意点**: ユーザーが見つからない場合は通知をスキップする（注文自体は正常に作成する）。通知失敗で注文が失敗しないようにする。
+
+#### 2. `tests/order.test.ts` — 新規作成
+
+- `vitest` の `describe`/`it`/`expect` を使用
+- テスト前のセットアップ:
+  - `clearOrders()`, `clearUsers()`, `clearNotifications()` で状態をリセット
+  - `createUser()` でテスト用ユーザーを作成
+- テストケース:
+  1. **注文作成時に通知が送信される** — `createOrder` 呼び出し後、`getSentNotifications()` で通知が1件存在し、件名・本文・宛先が正しいことを検証
+  2. **件名に orderId が含まれる** — `「注文確認: #${orderId}」` のフォーマットを検証
+  3. **本文にアイテム名と合計金額が含まれる** — 本文の内容を検証
+  4. **ユーザーが存在しない場合は通知が送信されない** — 存在しない userId で注文を作成し、通知が0件であることを検証
+  5. **注文自体は通知の有無に関わらず正常に作成される** — 戻り値の Order オブジェクトが正しいことを検証
+
+### 実装の順序
+
+1. **`src/order.ts` を修正** — import 追加 → `createOrder` に通知ロジック追加
+2. **`tests/order.test.ts` を作成** — テストケースを記述
+3. **`npx vitest run` でテスト実行** — 全テスト（既存 + 新規）が通ることを確認
+4. **`npx tsc --noEmit` で型チェック** — 型エラーがないことを確認
+5. **`npx eslint src/ tests/` で lint** — スタイル違反がないことを確認
+
+### リスクや注意点
+
+1. **通知失敗が注文をブロックしないこと** — `sendNotification` は現状スタブ（インメモリ保存）なので例外は出にくいが、将来的に外部サービス連携になった場合を考慮すると、通知部分を try-catch で囲むか、少なくとも通知失敗で注文の戻り値が変わらない設計にすべき
+
+2. **関数の行数制限（30行以下）** — CLAUDE.md のコードスタイル規約。通知本文の組み立てロジックを `createOrder` に直接書くと30行を超える可能性がある。超えそうな場合は、本文生成を別のヘルパー関数（例: `buildOrderNotificationBody`）に切り出す
+
+3. **import パスの規約** — 既存コードは `"./user.js"` のような相対パス import を使っている。CLAUDE.md では `@/` エイリアスの使用が推奨されているが、既存の `order.ts` は相対パスなので、同ファイル内での一貫性を優先して相対パスに揃えるのが安全
+
+4. **logger の使用** — CLAUDE.md では `console.log` の代わりに `src/logger.ts` の logger を使うルールがあるが、現在 `src/logger.ts` は存在しない。通知送信のログが必要な場合は logger の作成も必要になる（ただし今回のタスクスコープ外）
+
+5. **テストの状態管理** — `beforeEach` で `clearOrders()`, `clearUsers()`, `clearNotifications()` を呼び、テスト間の状態汚染を防ぐ必要がある
