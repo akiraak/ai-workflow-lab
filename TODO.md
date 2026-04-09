@@ -14,7 +14,7 @@
   - [x] B5: TDD Bug Fix パターンの効果測定（実行）
   - [x] B6: Hooks（lint 自動実行）の品質影響測定（実行）
   - [x] B4: Plan mode の初回成功率測定（実行）
-  - [ ] 結果分析・統合レポート作成
+  - [x] 結果分析・統合レポート作成
 - [ ] Web サイトに未掲載コンテンツを追加 ([計画](plans/add-missing-content-to-web.md))
   - [ ] 横断分析レポート (16-cross-analysis.md) をサイドバーに追加
   - [ ] Phase 4B 概要ページの作成 (experiments/phase-4b/index.md)

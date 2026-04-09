@@ -74,3 +74,7 @@
   - Plan mode は改善を示さず（plan+sonnet では subject_id が 40% に低下）
   - Opus は Sonnet より効率的（平均 14.4 turns vs 19.6 turns）だが結果は同等
   - 結果: `experiments/phase-4b/results/B4/results.csv`
+- [x] Phase 4B: 結果分析・統合レポート作成 (完了日: 2026-04-09)
+  - 6 実験（115 試行）の横断分析。6 仮説中 1 仮説（B6: Hooks）のみ支持
+  - 主要知見: Hooks（決定論的）> CLAUDE.md（助言的）、長い CLAUDE.md は有効、記述スタイルの差は実用上無視可能
+  - レポート: `experiments/claude-code-prompting/18-phase4b-integrated-report.md`
