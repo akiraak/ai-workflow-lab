@@ -14,6 +14,6 @@ if [ -f "$PID_FILE" ]; then
   rm -f "$PID_FILE"
 fi
 
-npx vitepress dev --host &
+npx vitepress dev --host --port 5175 &
 echo $! > "$PID_FILE"
 echo "Server started (PID: $!)"
