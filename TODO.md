@@ -5,6 +5,3 @@
 <!-- 形式: - [ ] タスク内容 -->
 <!-- 完了: 2026-04-09 →  DONE.md に移動済み -->
 
-- [ ] Webデザインの修正: ダークテーマ → ライトテーマへ変更（[プラン](plans/light-theme-redesign.md)）
-  - [x] デザイン案を複数作成（`design-preview.html`）→ ユーザーが選定中
-  - [ ] 選定テーマを VitePress に実装

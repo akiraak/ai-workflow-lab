@@ -90,3 +90,9 @@
   - C2: チームワークフロー（`19-C2-team-workflow.md`）— CLAUDE.md 3層管理, Git Worktrees, Code Review, 導入事例, ガバナンス
   - C3: コスト最適化（`19-C3-cost-optimization.md`）— モデル使い分け, Fast mode, トークン最適化, 料金体系, モニタリング
   - キャッシュ: `research/cache/2026-04-09T100000/`（36ページ）
+
+## Web デザイン
+- [x] Webデザインの修正: ダークテーマ → ライトテーマへ変更 (完了日: 2026-04-09)
+  - Theme F（Neutral / Minimal）を採用
+  - `.vitepress/theme/index.ts` + `custom.css` 新規作成
+  - `appearance: false` でライトモード固定

@@ -5,6 +5,8 @@ export default defineConfig({
   description: 'AI を普段の開発・作業ワークフローに組み込む手法の調査・検証',
   lang: 'ja',
   base: '/ai-workflow-lab/',
+  appearance: false,
+  ignoreDeadLinks: true,
 
   srcExclude: [
     '**/research/cache/**/[0-9]*.md',
@@ -14,6 +16,7 @@ export default defineConfig({
     'DONE.md',
     'CLAUDE.md',
     'plans/**',
+    'templates/**',
     'node_modules/**',
   ],
 
