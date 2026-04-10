@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow Lab - Light Theme Design Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #f0f0f0;
+    color: #333;
+    padding: 32px;
+  }
+
+  h1.page-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #222;
+  }
+  p.page-desc {
+    text-align: center;
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 14px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .theme-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+  .theme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  }
+  .theme-card.selected {
+    outline: 4px solid #3451b2;
+    outline-offset: 2px;
+  }
+
+  .theme-label {
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .theme-label .badge {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+
+  /* --- Mini VitePress Layout --- */
+  .vp-mock {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 44px 1fr;
+    height: 380px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .vp-nav {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 16px;
+    border-bottom: 1px solid;
+  }
+  .vp-nav .site-title {
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .vp-nav .nav-links {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+    font-size: 11px;
+  }
+  .vp-nav .nav-link {
+    opacity: 0.7;
+  }
+
+  .vp-sidebar {
+    padding: 16px 12px;
+    overflow: hidden;
+    border-right: 1px solid;
+  }
+  .vp-sidebar .sb-group {
+    margin-bottom: 10px;
+  }
+  .vp-sidebar .sb-title {
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 4px;
+    text-transform: none;
+  }
+  .vp-sidebar .sb-item {
+    padding: 2px 0 2px 10px;
+    font-size: 11px;
+    opacity: 0.75;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .vp-sidebar .sb-item.active {
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  .vp-content {
+    padding: 20px 24px;
+    overflow: hidden;
+  }
+  .vp-content h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid;
+  }
+  .vp-content h3 {
+    font-size: 13px;
+    margin: 12px 0 6px;
+  }
+  .vp-content p {
+    font-size: 12px;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  /* Mini table */
+  .vp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin: 8px 0;
+  }
+  .vp-table th, .vp-table td {
+    padding: 4px 8px;
+    text-align: left;
+    border: 1px solid;
+  }
+  .vp-table th {
+    font-weight: 600;
+  }
+
+  /* Code block */
+  .vp-code {
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 11px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+
+  /* Custom block (tip) */
+  .vp-tip {
+    border-left: 4px solid;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 11px;
+    margin: 8px 0;
+  }
+  .vp-tip .tip-title {
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  /* ============================
+     Theme Definitions
+     ============================ */
+
+  /* --- Theme A: Sky Blue --- */
+  .theme-a .theme-label { background: #3451b2; color: #fff; }
+  .theme-a .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-a .vp-nav { background: #ffffff; color: #333; border-color: #e2e2e3; }
+  .theme-a .vp-nav .site-title { color: #3451b2; }
+  .theme-a .vp-sidebar { background: #f6f6f7; color: #333; border-color: #e2e2e3; }
+  .theme-a .vp-sidebar .sb-item.active { color: #3451b2; }
+  .theme-a .vp-content { background: #ffffff; color: #1a1a1a; }
+  .theme-a .vp-content h2 { color: #1a1a1a; border-color: #e2e2e3; }
+  .theme-a .vp-content h3 { color: #3451b2; }
+  .theme-a .vp-content a { color: #3451b2; }
+  .theme-a .vp-table th { background: #f6f6f7; }
+  .theme-a .vp-table th, .theme-a .vp-table td { border-color: #e2e2e3; }
+  .theme-a .vp-code { background: #f6f6f7; color: #383a42; }
+  .theme-a .vp-tip { background: #f6f6f7; border-color: #3451b2; }
+  .theme-a .vp-tip .tip-title { color: #3451b2; }
+
+  /* --- Theme B: Forest Green --- */
+  .theme-b .theme-label { background: #2e7d32; color: #fff; }
+  .theme-b .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-b .vp-nav { background: #fafdf7; color: #2c3e2c; border-color: #d4e4d0; }
+  .theme-b .vp-nav .site-title { color: #2e7d32; }
+  .theme-b .vp-sidebar { background: #f2f7ef; color: #2c3e2c; border-color: #d4e4d0; }
+  .theme-b .vp-sidebar .sb-item.active { color: #2e7d32; }
+  .theme-b .vp-content { background: #fafdf7; color: #1a2e1a; }
+  .theme-b .vp-content h2 { color: #1a2e1a; border-color: #d4e4d0; }
+  .theme-b .vp-content h3 { color: #2e7d32; }
+  .theme-b .vp-content a { color: #2e7d32; }
+  .theme-b .vp-table th { background: #eef5eb; }
+  .theme-b .vp-table th, .theme-b .vp-table td { border-color: #d4e4d0; }
+  .theme-b .vp-code { background: #eef5eb; color: #2c3e2c; }
+  .theme-b .vp-tip { background: #eef5eb; border-color: #2e7d32; }
+  .theme-b .vp-tip .tip-title { color: #2e7d32; }
+
+  /* --- Theme C: Warm Terracotta --- */
+  .theme-c .theme-label { background: #c05621; color: #fff; }
+  .theme-c .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-c .vp-nav { background: #fffaf6; color: #3d2e1e; border-color: #e8d8c8; }
+  .theme-c .vp-nav .site-title { color: #c05621; }
+  .theme-c .vp-sidebar { background: #faf3ec; color: #3d2e1e; border-color: #e8d8c8; }
+  .theme-c .vp-sidebar .sb-item.active { color: #c05621; }
+  .theme-c .vp-content { background: #fffaf6; color: #2d1f0e; }
+  .theme-c .vp-content h2 { color: #2d1f0e; border-color: #e8d8c8; }
+  .theme-c .vp-content h3 { color: #c05621; }
+  .theme-c .vp-content a { color: #c05621; }
+  .theme-c .vp-table th { background: #f5ece2; }
+  .theme-c .vp-table th, .theme-c .vp-table td { border-color: #e8d8c8; }
+  .theme-c .vp-code { background: #f5ece2; color: #3d2e1e; }
+  .theme-c .vp-tip { background: #f5ece2; border-color: #c05621; }
+  .theme-c .vp-tip .tip-title { color: #c05621; }
+
+  /* --- Theme D: Soft Purple --- */
+  .theme-d .theme-label { background: #6c4dc4; color: #fff; }
+  .theme-d .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-d .vp-nav { background: #fbf8ff; color: #2e2440; border-color: #ddd2ef; }
+  .theme-d .vp-nav .site-title { color: #6c4dc4; }
+  .theme-d .vp-sidebar { background: #f5f0fb; color: #2e2440; border-color: #ddd2ef; }
+  .theme-d .vp-sidebar .sb-item.active { color: #6c4dc4; }
+  .theme-d .vp-content { background: #fbf8ff; color: #1e1830; }
+  .theme-d .vp-content h2 { color: #1e1830; border-color: #ddd2ef; }
+  .theme-d .vp-content h3 { color: #6c4dc4; }
+  .theme-d .vp-content a { color: #6c4dc4; }
+  .theme-d .vp-table th { background: #f0eaf7; }
+  .theme-d .vp-table th, .theme-d .vp-table td { border-color: #ddd2ef; }
+  .theme-d .vp-code { background: #f0eaf7; color: #2e2440; }
+  .theme-d .vp-tip { background: #f0eaf7; border-color: #6c4dc4; }
+  .theme-d .vp-tip .tip-title { color: #6c4dc4; }
+
+  /* --- Theme E: Ocean Teal --- */
+  .theme-e .theme-label { background: #0d7377; color: #fff; }
+  .theme-e .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-e .vp-nav { background: #f5fcfc; color: #1a3a3a; border-color: #c4e4e4; }
+  .theme-e .vp-nav .site-title { color: #0d7377; }
+  .theme-e .vp-sidebar { background: #edf7f7; color: #1a3a3a; border-color: #c4e4e4; }
+  .theme-e .vp-sidebar .sb-item.active { color: #0d7377; }
+  .theme-e .vp-content { background: #f5fcfc; color: #122828; }
+  .theme-e .vp-content h2 { color: #122828; border-color: #c4e4e4; }
+  .theme-e .vp-content h3 { color: #0d7377; }
+  .theme-e .vp-content a { color: #0d7377; }
+  .theme-e .vp-table th { background: #e4f3f3; }
+  .theme-e .vp-table th, .theme-e .vp-table td { border-color: #c4e4e4; }
+  .theme-e .vp-code { background: #e4f3f3; color: #1a3a3a; }
+  .theme-e .vp-tip { background: #e4f3f3; border-color: #0d7377; }
+  .theme-e .vp-tip .tip-title { color: #0d7377; }
+
+  /* --- Theme F: Neutral (Pure White) --- */
+  .theme-f .theme-label { background: #444; color: #fff; }
+  .theme-f .theme-label .badge { background: rgba(255,255,255,0.2); color: #fff; }
+  .theme-f .vp-nav { background: #ffffff; color: #333; border-color: #e0e0e0; }
+  .theme-f .vp-nav .site-title { color: #222; }
+  .theme-f .vp-sidebar { background: #fafafa; color: #333; border-color: #e0e0e0; }
+  .theme-f .vp-sidebar .sb-item.active { color: #222; }
+  .theme-f .vp-content { background: #ffffff; color: #1a1a1a; }
+  .theme-f .vp-content h2 { color: #1a1a1a; border-color: #e0e0e0; }
+  .theme-f .vp-content h3 { color: #555; }
+  .theme-f .vp-content a { color: #333; text-decoration: underline; }
+  .theme-f .vp-table th { background: #f5f5f5; }
+  .theme-f .vp-table th, .theme-f .vp-table td { border-color: #e0e0e0; }
+  .theme-f .vp-code { background: #f5f5f5; color: #333; }
+  .theme-f .vp-tip { background: #f5f5f5; border-color: #888; }
+  .theme-f .vp-tip .tip-title { color: #555; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">AI Workflow Lab - Light Theme Design Preview</h1>
+<p class="page-desc">6 つのカラーバリエーションを比較し、採用テーマを選定してください。カードをクリックで選択できます。</p>
+
+<div class="grid">
+
+  <!-- Theme A: Sky Blue -->
+  <div class="theme-card theme-a" onclick="selectTheme(this)">
+    <div class="theme-label">A: Sky Blue <span class="badge">VitePress Default Light</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme B: Forest Green -->
+  <div class="theme-card theme-b" onclick="selectTheme(this)">
+    <div class="theme-label">B: Forest Green <span class="badge">Natural</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme C: Warm Terracotta -->
+  <div class="theme-card theme-c" onclick="selectTheme(this)">
+    <div class="theme-label">C: Warm Terracotta <span class="badge">Warm</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme D: Soft Purple -->
+  <div class="theme-card theme-d" onclick="selectTheme(this)">
+    <div class="theme-label">D: Soft Purple <span class="badge">Modern</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme E: Ocean Teal -->
+  <div class="theme-card theme-e" onclick="selectTheme(this)">
+    <div class="theme-label">E: Ocean Teal <span class="badge">Cool</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme F: Neutral -->
+  <div class="theme-card theme-f" onclick="selectTheme(this)">
+    <div class="theme-label">F: Neutral <span class="badge">Minimal</span></div>
+    <div class="vp-mock">
+      <div class="vp-nav">
+        <span class="site-title">AI Workflow Lab</span>
+        <div class="nav-links">
+          <span class="nav-link">Web調査キャッシュ</span>
+        </div>
+      </div>
+      <div class="vp-sidebar">
+        <div class="sb-group">
+          <div class="sb-title">Phase 1: 指示チャネルの整理</div>
+          <div class="sb-item active">対話プロンプトの特性</div>
+          <div class="sb-item">CLAUDE.md の活用法</div>
+          <div class="sb-item">Plan mode の活用法</div>
+          <div class="sb-item">slash commands・ツール連携</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 2: タスク別指示</div>
+          <div class="sb-item">バグ修正タスク</div>
+          <div class="sb-item">新機能実装タスク</div>
+          <div class="sb-item">リファクタリング</div>
+        </div>
+        <div class="sb-group">
+          <div class="sb-title">Phase 4B: 実証実験</div>
+          <div class="sb-item">B1: 事実形式 vs 命令形式</div>
+          <div class="sb-item">B2: 否定形 vs 肯定形</div>
+        </div>
+      </div>
+      <div class="vp-content">
+        <h2>対話プロンプトの特性</h2>
+        <p>Claude Code への直接指示における効果的なプロンプティング手法を調査。</p>
+        <h3>Phase 1 調査結果</h3>
+        <table class="vp-table">
+          <tr><th>#</th><th>テーマ</th><th>状態</th></tr>
+          <tr><td>1-1</td><td><a>対話プロンプトの特性</a></td><td>完了</td></tr>
+          <tr><td>1-2</td><td><a>CLAUDE.md の活用法</a></td><td>完了</td></tr>
+        </table>
+        <div class="vp-tip">
+          <div class="tip-title">TIP</div>
+          明確な指示文は成功率を大幅に向上させます。
+        </div>
+        <div class="vp-code">$ claude "バグを修正して"<br>$ claude --plan "設計を確認"</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function selectTheme(card) {
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  const name = card.querySelector('.theme-label').textContent.trim().split('\n')[0];
+  console.log('Selected:', name);
+}
+</script>
+
+</body>
+</html>
