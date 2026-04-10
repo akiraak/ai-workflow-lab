@@ -24,7 +24,7 @@
   --vp-c-gutter: #e2e8f0;
 
   /* Nav */
-  --vp-nav-bg-color: #ffffff;
+  --vp-nav-bg-color: #444;
 
   /* Sidebar */
   --vp-sidebar-bg-color: #f8fafc;
@@ -52,16 +52,41 @@
   --vp-custom-block-info-text: #334155;
 }
 
-/* ── Nav ── */
+/* ── Nav (dark bar) ── */
 .VPNav .VPNavBar {
-  border-bottom: 1px solid var(--vp-c-divider);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  background-color: #444 !important;
+  border-bottom: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .VPNavBar .title {
-  color: var(--vp-c-brand-3) !important;
+  color: #fff !important;
   font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+.VPNavBar .VPNavBarMenu .VPNavBarMenuLink {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.VPNavBar .VPNavBarMenu .VPNavBarMenuLink:hover,
+.VPNavBar .VPNavBarMenu .VPNavBarMenuLink.active {
+  color: #fff !important;
+}
+
+.VPNavBar .VPNavBarExtra .icon {
+  fill: rgba(255, 255, 255, 0.8) !important;
+}
+
+.VPNavBar .VPNavBarSearch .DocSearch-Button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.VPNavBar .VPNavBarHamburger .top,
+.VPNavBar .VPNavBarHamburger .middle,
+.VPNavBar .VPNavBarHamburger .bottom {
+  background-color: #fff !important;
 }
 
 /* ── Sidebar ── */
