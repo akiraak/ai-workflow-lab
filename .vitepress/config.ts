@@ -76,6 +76,12 @@ export default defineConfig({
             { text: '統合レポート', link: '/experiments/claude-code-prompting/18-phase4b-integrated-report' },
           ],
         },
+        {
+          text: '実践ガイド',
+          items: [
+            { text: 'Hooks レシピ集', link: '/guides/hooks-cookbook' },
+          ],
+        },
       ],
       '/research/': [
         {
